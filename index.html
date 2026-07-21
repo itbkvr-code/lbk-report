@@ -30,7 +30,7 @@ tr:hover{background:#fafafa}
 .card-title{font-size:11px;color:#71717a;text-transform:uppercase;margin-bottom:4px}
 .card-sub{font-size:11px;color:#a1a1aa;margin-top:4px}
 .bar-h{height:20px;background:#f4f4f4;border-radius:4px;overflow:hidden;margin-top:8px}
-.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;color:white;font-weight:500}
+.bar-fill{height:100%;border-radius:4px}
 .blue{background:#3b82f6}.green{background:#22c55e}.red{background:#ef4444}.amber{background:#f59e0b}
 .badge{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:500}
 .b-contact{background:#dbeafe;color:#1e40af}.b-nocontact{background:#fef3c7;color:#92400e}
@@ -38,346 +38,480 @@ tr:hover{background:#fafafa}
 .b-bfl{background:#f3e8ff;color:#6b21a8}.b-contract{background:#d1fae5;color:#065f46}
 .b-new{background:#f4f4f4;color:#52525b}.b-postponed{background:#fef9c3;color:#854d0e}
 .dl{color:#1e293b;text-decoration:none;font-weight:500}.dl:hover{text-decoration:underline}
-.mo{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.35);z-index:1000;justify-content:center;align-items:center}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:1000;justify-content:center;align-items:center}
 .mo.a{display:flex}
 .md{background:white;border-radius:12px;width:90%;max-width:900px;max-height:80vh;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.15)}
 .mh{padding:12px 16px;border-bottom:1px solid #e4e4e7;display:flex;justify-content:space-between;align-items:center}
-.mh h2{font-size:14px;color:#1e293b}.mx{background:none;border:none;font-size:18px;cursor:pointer;color:#a1a1aa;padding:2px 6px}
+.mh h2{font-size:14px}.mx{background:none;border:none;font-size:18px;cursor:pointer;color:#a1a1aa}
 .mb2{padding:12px 16px;overflow-y:auto;max-height:calc(80vh - 100px)}
-.mf2{padding:8px 16px;border-top:1px solid #e4e4e7;background:#fafafa;font-size:11px;color:#a1a1aa;text-align:right}
-.mt{width:100%;border-collapse:collapse}.mt th,.mt td{padding:6px 8px;text-align:left;border-bottom:1px solid #f4f4f4;font-size:11px}
+.mf2{padding:8px 16px;border-top:1px solid #e4e4e7;background:#fafafa;font-size:11px;color:#a1a1aa;display:flex;justify-content:space-between;align-items:center}
+.mt{width:100%;border-collapse:collapse}.mt th,.mt td{padding:6px 8px;border-bottom:1px solid #f4f4f4;font-size:11px}
 .mt th{color:#a1a1aa;font-size:9px;text-transform:uppercase;position:sticky;top:0;background:white}
 .ft{text-align:center;padding:12px;color:#d4d4d8;font-size:10px}
-.loading{text-align:center;padding:40px;color:#a1a1aa}
+.loading{text-align:center;padding:40px;color:#a1a1aa;display:none}
 .spinner{display:inline-block;width:24px;height:24px;border:3px solid #e4e4e7;border-top-color:#1e293b;border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.error{background:#fee2e2;color:#991b1b;padding:12px;border-radius:8px;margin-bottom:12px;font-size:12px}
-.status{font-size:10px;color:#71717a;margin-top:4px}
-@media(max-width:640px){body{padding:12px}.hdr{padding:16px}.hdr h1{font-size:16px}.bar{flex-direction:column;gap:8px}.fg{width:100%}.row{flex-direction:column}.md{width:96%}}
-@media(max-width:480px){.num{font-size:22px}.card{padding:10px}}
+.error{background:#fee2e2;color:#991b1b;padding:12px;border-radius:8px;margin-bottom:12px;font-size:12px;display:none}
+.welcome{text-align:center;padding:48px 20px;color:#71717a}
+.welcome h2{font-size:18px;color:#1e293b;margin:12px 0 8px}
+.status{font-size:10px;color:#71717a}
+@media(max-width:640px){body{padding:12px}.hdr{padding:16px}.hdr h1{font-size:16px}.bar{flex-direction:column}.fg{width:100%}.row{flex-direction:column}.md{width:96%}.num{font-size:22px}}
 </style>
 </head>
 <body>
 <div class="c">
-<div class="hdr"><h1>Отчёт по воронке «Белая» — ЛБК</h1><div class="s" id="hdrSub">Нажмите «Загрузить данные»</div></div>
+<div class="hdr">
+  <h1>Отчёт по воронке «Белая» — ЛБК</h1>
+  <div class="s" id="hdrSub">Нажмите «Загрузить данные»</div>
+</div>
 
 <div class="bar">
-<div class="fg"><label>Менеджер</label><select id="mf" onchange="rn()"><option value="">Все</option></select></div>
-<div class="fg"><label>Источник</label><select id="sf" onchange="rn()"><option value="">Все</option>
-<option value="CALL">2Gis</option><option value="WEB">Сайт</option><option value="1">Реклама Тюмень</option></select></div>
-<div class="fg"><label>&nbsp;</label><button class="btn btn-load" id="btnLoad" onclick="loadData()">Загрузить данные</button></div>
-<div class="fg"><label>&nbsp;</label><button class="btn" onclick="rf()">Сбросить</button></div>
-<div class="fg" style="flex:1;text-align:right"><span id="status" class="status"></span></div>
+  <div class="fg"><label>Менеджер</label><select id="mf" onchange="rn()"><option value="">Все</option></select></div>
+  <div class="fg"><label>Источник</label>
+    <select id="sf" onchange="rn()">
+      <option value="">Все</option>
+      <option value="CALL">2Gis</option>
+      <option value="WEB">Сайт</option>
+      <option value="1">Реклама Тюмень</option>
+    </select>
+  </div>
+  <div class="fg"><label>&nbsp;</label><button class="btn btn-load" id="btnLoad" onclick="loadData(false)">Загрузить данные</button></div>
+  <div class="fg"><label>&nbsp;</label><button class="btn" id="btnRefresh" onclick="loadData(true)" style="display:none">Обновить</button></div>
+  <div class="fg"><label>&nbsp;</label><button class="btn" onclick="rf()">Сбросить</button></div>
+  <div class="fg" style="flex:1;text-align:right"><span id="status" class="status"></span></div>
 </div>
 
-<div id="loader" class="loading" style="display:none"><div class="spinner"></div><br><span id="loaderText">Загрузка данных из Битрикс24...</span></div>
-<div id="err" style="display:none"><div class="error" id="errMsg"></div></div>
+<div id="err" class="error"></div>
+<div id="loader" class="loading"><div class="spinner"></div><br><span id="loaderText">Загрузка...</span></div>
+
+<div id="welcome" class="welcome">
+  <div style="font-size:40px">📊</div>
+  <h2>Воронка «Белая»</h2>
+  <div>Выберите фильтры при необходимости и нажмите «Загрузить данные»</div>
+  <div style="margin-top:8px;font-size:11px;color:#a1a1aa">KPI — реальные totals • Drill-down — последние 200 записей • Кеш 5 мин</div>
+</div>
 
 <div id="report" style="display:none">
-<div class="row" id="kpi1"></div>
-<div class="sec" id="funnel"></div>
-<div class="row" id="kpi2"></div>
-<div class="sec" id="src"></div>
-<div class="sec" id="mgr"></div>
-
-<div class="sec" style="padding:12px"><div class="st">Расшифровка</div>
-<table><thead><tr><th>Показатель</th><th>Значение</th><th>Формула</th></tr></thead><tbody>
-<tr><td>1. Всего клиентов</td><td>COUNT все сделки</td><td>crm.deal.list</td></tr>
-<tr><td>2. Отработанные</td><td>Все кроме новых</td><td>Всего - Новые</td></tr>
-<tr><td>2.1 Контактные</td><td>Дозвонились</td><td>C7:UC_P87M1G + C7:UC_Y0BQ2D + C7:UC_LXNWTC</td></tr>
-<tr><td>2.2 Неконтактные</td><td>Не дозвонились</td><td>C7:UC_3TVNLD + C7:UC_OAQINS</td></tr>
-<tr><td>3.1 Согласившиеся</td><td>Оплата/Договор</td><td>C7:UC_NSJ4IL + C7:UC_CGL5BN</td></tr>
-<tr><td>3.2 Отказ</td><td>Отказались</td><td>C7:UC_TK23QX + C7:UC_A9MV0I + C7:UC_QCRDAA</td></tr>
-<tr><td>3.3 БФЛ</td><td>Обратились в другие организации</td><td>C7:UC_3C2QXL + C7:UC_T7BCTN</td></tr>
-<tr><td>4. Договоры</td><td>Заключили договор</td><td>C7:WON</td></tr>
-</tbody></table></div>
-
-<div class="ft">ЛБК • Отчёт по воронке «Белая» • Данные из Битрикс24</div>
+  <div class="row" id="kpi1"></div>
+  <div class="sec" id="funnel"></div>
+  <div class="row" id="kpi2"></div>
+  <div class="sec" id="src"></div>
+  <div class="sec" id="mgr"></div>
+  <div class="sec" style="padding:12px">
+    <div class="st">Расшифровка</div>
+    <table>
+      <thead><tr><th>Показатель</th><th>Значение</th><th>Источник в Битрикс24</th></tr></thead>
+      <tbody>
+        <tr><td>1. Всего клиентов</td><td>Все сделки воронки</td><td>category_id=7</td></tr>
+        <tr><td>2. Отработанные</td><td>Все кроме новых</td><td>Всего − Новые</td></tr>
+        <tr><td>2.1 Контактные</td><td>Дозвон КЦ / встреча</td><td>C7:UC_P87M1G, C7:UC_Y0BQ2D, C7:UC_LXNWTC</td></tr>
+        <tr><td>2.2 Неконтактные</td><td>Недозвон / пропал</td><td>C7:UC_3TVNLD, C7:UC_OAQINS</td></tr>
+        <tr><td>3.1 Согласившиеся</td><td>Решение / оплата</td><td>C7:UC_NSJ4IL, C7:UC_CGL5BN</td></tr>
+        <tr><td>3.2 Отказ</td><td>Отказ / долг &lt; 200т</td><td>C7:UC_TK23QX, C7:UC_A9MV0I, C7:UC_QCRDAA</td></tr>
+        <tr><td>3.3 БФЛ</td><td>Проходят / не подходит</td><td>C7:UC_3C2QXL, C7:UC_T7BCTN</td></tr>
+        <tr><td>4. Договоры</td><td>Успешные сделки</td><td>C7:WON</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="ft">ЛБК • Воронка «Белая» • Данные Битрикс24 через JS SDK</div>
 </div>
 </div>
 
-<div class="mo" id="mO" onclick="cm(event)"><div class="md" onclick="event.stopPropagation()">
-<div class="mh"><h2 id="mT"></h2><button class="mx" onclick="cm()">✕</button></div>
-<div class="mb2" id="mB"></div>
-<div class="mf2"><span id="mC"></span> <button class="btn" onclick="cm()">Закрыть</button></div>
-</div></div>
+<div class="mo" id="mO" onclick="cm(event)">
+  <div class="md" onclick="event.stopPropagation()">
+    <div class="mh"><h2 id="mT"></h2><button class="mx" onclick="cm()">✕</button></div>
+    <div class="mb2" id="mB"></div>
+    <div class="mf2"><span id="mC"></span><button class="btn" onclick="cm()">Закрыть</button></div>
+  </div>
+</div>
 
 <script>
-const CACHE_TTL=5*60*1000;
-const THROTTLE_MS=500;
-const CATEGORY_ID=7;
+const CACHE_TTL = 5 * 60 * 1000;
+const THROTTLE_MS = 500;
+const CATEGORY_ID = 7;
+const MAX_DETAIL = 200;
 
-let D=[];
-let totalsData=null;
-let users={};
-let lastRequestTime=0;
+let D = [];
+let totalsData = null;
+let users = {};
+let lastRequestTime = 0;
+let portalDomain = 'lbk.bitrix24.ru';
+let bxReady = false;
 
-const srcMap={"CALL":"2Gis","WEB":"Сайт","1":"Реклама Тюмень","":"Не указан"};
-const funnelNames={"new":"Новый","contact":"Контактный","nocontact":"Неконтактный","agreed":"Согласившийся","refused":"Отказ","bfl":"БФЛ","contract":"Договор","postponed":"Отложенный","lost":"Провален"};
-
-// Stage → funnel mapping for Белая (category 7)
-const stageMap={
-"C7:NEW":"new","C7:PREPARATION":"new","C7:UC_393JXA":"new","C7:UC_6PNQ66":"new",
-"C7:UC_YI3WF6":"new","C7:UC_HUDROY":"new","C7:UC_24XYJH":"new","C7:UC_RQ3JU2":"new",
-"C7:UC_P87M1G":"contact","C7:UC_Y0BQ2D":"contact","C7:UC_LXNWTC":"contact",
-"C7:UC_3TVNLD":"nocontact","C7:UC_OAQINS":"nocontact",
-"C7:UC_WZWCCQ":"postponed",
-"C7:UC_NSJ4IL":"agreed","C7:UC_CGL5BN":"agreed",
-"C7:UC_TK23QX":"refused","C7:UC_A9MV0I":"refused","C7:UC_QCRDAA":"refused",
-"C7:UC_3C2QXL":"bfl","C7:UC_T7BCTN":"bfl",
-"C7:WON":"contract","C7:LOSE":"lost","C7:APOLOGY":"lost"
+const srcMap = {CALL:'2Gis', WEB:'Сайт', '1':'Реклама Тюмень', '': 'Не указан'};
+const funnelNames = {
+  new:'Новый', contact:'Контактный', nocontact:'Неконтактный', agreed:'Согласившийся',
+  refused:'Отказ', bfl:'БФЛ', contract:'Договор', postponed:'Отложенный', lost:'Провален', other:'Другое'
 };
 
-function p(n,d){return d?Math.round(n/d*100):0}
-function status(t){document.getElementById('status').textContent=t}
-function err(t){const e=document.getElementById('err');e.style.display=t?'block':'none';document.getElementById('errMsg').textContent=t||''}
+// Белая = category 7
+const stageMap = {
+  'C7:NEW':'new','C7:PREPARATION':'new','C7:UC_393JXA':'new','C7:UC_6PNQ66':'new',
+  'C7:UC_YI3WF6':'new','C7:UC_HUDROY':'new','C7:UC_24XYJH':'new','C7:UC_RQ3JU2':'new',
+  'C7:UC_P87M1G':'contact','C7:UC_Y0BQ2D':'contact','C7:UC_LXNWTC':'contact',
+  'C7:UC_3TVNLD':'nocontact','C7:UC_OAQINS':'nocontact',
+  'C7:UC_WZWCCQ':'postponed',
+  'C7:UC_NSJ4IL':'agreed','C7:UC_CGL5BN':'agreed',
+  'C7:UC_TK23QX':'refused','C7:UC_A9MV0I':'refused','C7:UC_QCRDAA':'refused',
+  'C7:UC_3C2QXL':'bfl','C7:UC_T7BCTN':'bfl',
+  'C7:WON':'contract','C7:LOSE':'lost','C7:APOLOGY':'lost'
+};
 
-// Throttled API call
-async function b24call(method,params={}){
-const now=Date.now();
-const elapsed=now-lastRequestTime;
-if(elapsed<THROTTLE_MS){
-await new Promise(r=>setTimeout(r,THROTTLE_MS-elapsed));
-}
-lastRequestTime=Date.now();
-return new Promise((resolve,reject)=>{
-BX24.callMethod(method,params,r=>{
-if(r.error()){
-// QUERY_LIMIT_EXCEEDED → retry after 2s
-const msg=String(r.error());
-if(msg.includes('QUERY_LIMIT')||msg.includes('429')){
-setTimeout(()=>b24call(method,params).then(resolve).catch(reject),2000);
-return;
-}
-reject(new Error(msg));
-}else{
-resolve(r.data());
-}
-});
-});
+const stageNames = {
+  'C7:NEW':'Новая','C7:PREPARATION':'Свердловская область','C7:UC_393JXA':'МОП','C7:UC_6PNQ66':'МОП дозв',
+  'C7:UC_YI3WF6':'Марина','C7:UC_HUDROY':'Аделина','C7:UC_24XYJH':'Гульмира','C7:UC_RQ3JU2':'Наталья',
+  'C7:UC_P87M1G':'КЦ ДОЗВ (1-3дн)','C7:UC_Y0BQ2D':'КЦ ДОЗВ (4-7дн)','C7:UC_LXNWTC':'ВСТРЕЧА НАЗНАЧЕНА',
+  'C7:UC_3TVNLD':'Недозвон','C7:UC_OAQINS':'Пропал','C7:UC_WZWCCQ':'Отложенный',
+  'C7:UC_NSJ4IL':'Принятие решения','C7:UC_CGL5BN':'Оплата/договор',
+  'C7:UC_TK23QX':'Отказ','C7:UC_A9MV0I':'Отказ п/встр','C7:UC_QCRDAA':'Долг менее 200тр',
+  'C7:UC_3C2QXL':'БФЛ проходят','C7:UC_T7BCTN':'БФЛ не подходит',
+  'C7:WON':'Сделка успешна','C7:LOSE':'Сделка провалена','C7:APOLOGY':'Анализ провала'
+};
+
+function p(n,d){ return d ? Math.round(n/d*100) : 0; }
+function setStatus(t){ document.getElementById('status').textContent = t || ''; }
+function setErr(t){
+  const el = document.getElementById('err');
+  if (!t) { el.style.display='none'; el.textContent=''; return; }
+  el.style.display='block'; el.textContent = t;
 }
 
-// Cache helpers
-function getCacheKey(){const d=new Date();return 'lbk_report_v2_'+d.toISOString().split('T')[0]}
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+async function throttle(){
+  const now = Date.now();
+  const wait = THROTTLE_MS - (now - lastRequestTime);
+  if (wait > 0) await sleep(wait);
+  lastRequestTime = Date.now();
+}
+
+// BX24.callMethod wrapper: returns {items, total}
+async function b24call(method, params = {}, retries = 3){
+  if (!bxReady) throw new Error('Bitrix24 SDK не инициализирован. Откройте отчёт из приложения портала.');
+  await throttle();
+  return new Promise((resolve, reject) => {
+    BX24.callMethod(method, params, function(result){
+      if (result.error()) {
+        const msg = String(result.error());
+        if ((msg.includes('QUERY_LIMIT') || msg.includes('429') || msg.includes('TOO_MANY')) && retries > 0) {
+          sleep(2000).then(() => b24call(method, params, retries - 1).then(resolve).catch(reject));
+          return;
+        }
+        reject(new Error(msg));
+        return;
+      }
+      const data = result.data();
+      const total = (typeof result.total === 'function') ? result.total() : (result.answer && result.answer.total) || 0;
+      resolve({ items: data, total: total || 0 });
+    });
+  });
+}
+
+function cacheKey(){ return 'lbk_report_v3_' + new Date().toISOString().slice(0,10); }
 function getCache(){
-const k=getCacheKey();
-try{const c=localStorage.getItem(k);if(!c)return null;const d=JSON.parse(c);if(Date.now()-d.t>(CACHE_TTL||300000)){localStorage.removeItem(k);return null}return d}catch(e){return null}
+  try {
+    const raw = localStorage.getItem(cacheKey());
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (Date.now() - obj.t > CACHE_TTL) { localStorage.removeItem(cacheKey()); return null; }
+    return obj;
+  } catch(e) { return null; }
 }
-function setCache(d){localStorage.setItem(getCacheKey(),JSON.stringify({t:Date.now(),d:d}))}
+function setCache(payload){
+  try { localStorage.setItem(cacheKey(), JSON.stringify({ t: Date.now(), d: payload })); } catch(e) {}
+}
+function clearCache(){ try { localStorage.removeItem(cacheKey()); } catch(e) {} }
 
-async function loadData(){
-const btn=document.getElementById('btnLoad');
-btn.disabled=true;btn.textContent='Загрузка...';
-document.getElementById('loader').style.display='block';
-document.getElementById('report').style.display='none';
-err('');
-
-try{
-// Check cache
-const cache=getCache();
-if(cache){
-document.getElementById('loader').style.display='none';
-btn.disabled=false;btn.textContent='Обновить данные';
-status('Данные из кеша • '+new Date(cache.t).toLocaleTimeString());
-totalsData=cache.d.totals;
-users=cache.d.users;
-D=cache.d.deals;
-document.getElementById('report').style.display='block';
-document.getElementById('hdrSub').textContent=totalsData.totalRecords+' сделок • Воронка «Белая»';
-initFilters();
-rn();
-return;
+function showReportUI(){
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('report').style.display = 'block';
+  document.getElementById('btnRefresh').style.display = 'inline-block';
+  document.getElementById('btnLoad').textContent = 'Загрузить данные';
 }
 
-status('Загрузка из Битрикс24...');
-document.getElementById('loaderText').textContent='Считаем записи по стадиям...';
-
-// Get totals by stage
-const totalsByFunnel={new:0,contact:0,nocontact:0,agreed:0,refused:0,bfl:0,contract:0,postponed:0,lost:0};
-let totalRecords=0;
-
-// Get all stage codes from mapping
-const stagesByFunnel={};
-Object.entries(stageMap).forEach(([stage,f])=>{
-if(!stagesByFunnel[f])stagesByFunnel[f]=[];
-stagesByFunnel[f].push(stage);
-});
-
-// Count each funnel category
-for(const [funnel,stages] of Object.entries(stagesByFunnel)){
-let count=0;
-for(const stage of stages){
-const r=await b24call('crm.deal.list',{
-filter:{CATEGORY_ID:CATEGORY_ID,STAGE_ID:stage},
-select:['ID'],
-start:0
-});
-count+=(r.total||0);
-}
-totalsByFunnel[funnel]=count;
-totalRecords+=count;
+function applyData(payload, fromCache){
+  totalsData = payload.totals;
+  users = payload.users || {};
+  D = payload.deals || [];
+  portalDomain = payload.portal || portalDomain;
+  document.getElementById('hdrSub').textContent =
+    (totalsData.totalRecords || 0).toLocaleString('ru-RU') + ' сделок • Воронка «Белая»' +
+    (fromCache ? ' • из кеша' : '');
+  initFilters();
+  showReportUI();
+  rn();
 }
 
-totalsData={totalsByFunnel,totalRecords};
+async function loadData(forceRefresh){
+  const btn = document.getElementById('btnLoad');
+  const btnR = document.getElementById('btnRefresh');
+  btn.disabled = true; btnR.disabled = true;
+  document.getElementById('loader').style.display = 'block';
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('report').style.display = 'none';
+  setErr('');
 
-document.getElementById('loaderText').textContent='Загружаем детальные записи...';
+  try {
+    if (!forceRefresh) {
+      const cached = getCache();
+      if (cached && cached.d) {
+        document.getElementById('loader').style.display = 'none';
+        btn.disabled = false; btnR.disabled = false;
+        setStatus('Кеш • ' + new Date(cached.t).toLocaleTimeString('ru-RU'));
+        applyData(cached.d, true);
+        return;
+      }
+    } else {
+      clearCache();
+    }
 
-// Load detail records for drill-down (latest 200)
-let allDeals=[],lastId=0;
-const MAX_DETAIL=200;
+    setStatus('Загрузка из Битрикс24...');
+    document.getElementById('loaderText').textContent = 'Считаем KPI по стадиям...';
 
-while(allDeals.length<MAX_DETAIL){
-const r=await b24call('crm.deal.list',{
-filter:{CATEGORY_ID:CATEGORY_ID,'>ID':lastId},
-order:{ID:'DESC'},
-start:0
-});
-const chunk=r.result||[];
-if(!chunk.length)break;
-allDeals=allDeals.concat(chunk.slice(0,MAX_DETAIL-allDeals.length));
-lastId=Math.max(...chunk.map(d=>parseInt(d.ID)));
-if(chunk.length<50||allDeals.length>=MAX_DETAIL)break;
-}
+    // Totals: one request per stage (uses API total, not page size)
+    const totalsByFunnel = {new:0,contact:0,nocontact:0,agreed:0,refused:0,bfl:0,contract:0,postponed:0,lost:0,other:0};
+    let totalRecords = 0;
+    const stagesByFunnel = {};
+    Object.entries(stageMap).forEach(([stage, f]) => {
+      if (!stagesByFunnel[f]) stagesByFunnel[f] = [];
+      stagesByFunnel[f].push(stage);
+    });
 
-document.getElementById('loaderText').textContent='Загружаем пользователей...';
+    for (const [funnel, stages] of Object.entries(stagesByFunnel)) {
+      let count = 0;
+      for (const stage of stages) {
+        const r = await b24call('crm.deal.list', {
+          filter: { CATEGORY_ID: CATEGORY_ID, STAGE_ID: stage },
+          select: ['ID'],
+          start: 0
+        });
+        count += (r.total || 0);
+      }
+      totalsByFunnel[funnel] = count;
+      totalRecords += count;
+      document.getElementById('loaderText').textContent =
+        'KPI: ' + funnel + ' = ' + count + ' • всего ' + totalRecords;
+    }
 
-// Load users
-const usersResp=await b24call('user.get',{ADMIN_MODE:'Y'});
-users={};
-usersResp.forEach(u=>{
-users[String(u.ID)]=((u.LAST_NAME||'')+' '+(u.NAME||'')).trim();
-});
+    totalsData = { totalsByFunnel, totalRecords };
 
-// Build deals array
-D=allDeals.map(d=>{
-const stage=d.STAGE_ID||'';
-const mid=d.ASSIGNED_BY_ID||'';
-const funnel=stageMap[stage]||'other';
-return{
-id:d.ID,
-title:(d.TITLE||'').substring(0,60),
-stage:stage,
-funnel:funnel,
-source:d.SOURCE_ID||'',
-manager:users[mid]||mid,
-mid:mid,
-date:(d.DATE_CREATE||'').substring(0,10)
-};
-});
+    document.getElementById('loaderText').textContent = 'Загружаем drill-down (до ' + MAX_DETAIL + ' записей)...';
 
-// Save to cache
-setCache({totals:totalsData,users,deals:D});
+    // Detail rows for drill-down: newest first
+    let allDeals = [];
+    let start = 0;
+    while (allDeals.length < MAX_DETAIL) {
+      const r = await b24call('crm.deal.list', {
+        filter: { CATEGORY_ID: CATEGORY_ID },
+        select: ['ID','TITLE','STAGE_ID','ASSIGNED_BY_ID','SOURCE_ID','DATE_CREATE'],
+        order: { ID: 'DESC' },
+        start: start
+      });
+      const chunk = Array.isArray(r.items) ? r.items : [];
+      if (!chunk.length) break;
+      const need = MAX_DETAIL - allDeals.length;
+      allDeals = allDeals.concat(chunk.slice(0, need));
+      start += chunk.length;
+      if (chunk.length < 50) break;
+    }
 
-}catch(e){
-err('Ошибка загрузки: '+e.message);
-status('');
-}finally{
-document.getElementById('loader').style.display='none';
-btn.disabled=false;btn.textContent='Обновить данные';
-if(totalsData){
-document.getElementById('report').style.display='block';
-document.getElementById('hdrSub').textContent=totalsData.totalRecords+' сделок • Воронка «Белая»';
-initFilters();
-rn();
-status('Готово • '+new Date().toLocaleTimeString());
-}
-}
+    document.getElementById('loaderText').textContent = 'Загружаем пользователей...';
+    users = {};
+    try {
+      const ur = await b24call('user.get', { ADMIN_MODE: 'Y' });
+      const list = Array.isArray(ur.items) ? ur.items : [];
+      list.forEach(u => {
+        users[String(u.ID)] = ((u.LAST_NAME || '') + ' ' + (u.NAME || '')).trim();
+      });
+    } catch (e) {
+      // fallback without ADMIN_MODE
+      const ur = await b24call('user.get', {});
+      const list = Array.isArray(ur.items) ? ur.items : [];
+      list.forEach(u => {
+        users[String(u.ID)] = ((u.LAST_NAME || '') + ' ' + (u.NAME || '')).trim();
+      });
+    }
+
+    D = allDeals.map(d => {
+      const stage = d.STAGE_ID || '';
+      const mid = String(d.ASSIGNED_BY_ID || '');
+      return {
+        id: d.ID,
+        title: (d.TITLE || '').substring(0, 60),
+        stage: stage,
+        stage_name: stageNames[stage] || stage,
+        funnel: stageMap[stage] || 'other',
+        source: d.SOURCE_ID || '',
+        manager: users[mid] || mid || '—',
+        mid: mid,
+        date: (d.DATE_CREATE || '').substring(0, 10)
+      };
+    });
+
+    try {
+      const auth = BX24.getAuth && BX24.getAuth();
+      if (auth && auth.domain) portalDomain = auth.domain;
+    } catch(e) {}
+
+    const payload = { totals: totalsData, users, deals: D, portal: portalDomain };
+    setCache(payload);
+    applyData(payload, false);
+    setStatus('Обновлено • ' + new Date().toLocaleTimeString('ru-RU'));
+  } catch (e) {
+    setErr('Ошибка загрузки: ' + (e.message || e));
+    document.getElementById('welcome').style.display = 'block';
+    setStatus('');
+  } finally {
+    document.getElementById('loader').style.display = 'none';
+    btn.disabled = false; btnR.disabled = false;
+  }
 }
 
 function initFilters(){
-const mgrs=new Set(D.map(d=>d.manager));
-const mf=document.getElementById('mf');
-mf.innerHTML='<option value="">Все</option>';
-[...mgrs].sort().forEach(m=>{
-const mid=D.find(d=>d.manager===m).mid;
-mf.innerHTML+=`<option value="${mid}">${m}</option>`;
-});
+  const mf = document.getElementById('mf');
+  const cur = mf.value;
+  mf.innerHTML = '<option value="">Все</option>';
+  const map = {};
+  D.forEach(x => { if (x.mid && x.manager) map[x.mid] = x.manager; });
+  Object.entries(map).sort((a,b) => a[1].localeCompare(b[1], 'ru')).forEach(([id, name]) => {
+    mf.innerHTML += '<option value="' + id + '">' + name + '</option>';
+  });
+  if (cur) mf.value = cur;
 }
 
-function rf(){document.getElementById('mf').value='';document.getElementById('sf').value='';rn()}
+function rf(){
+  document.getElementById('mf').value = '';
+  document.getElementById('sf').value = '';
+  rn();
+}
 
 function rn(){
-if(!totalsData)return;
-const m=document.getElementById('mf').value;
-const s=document.getElementById('sf').value;
+  if (!totalsData) return;
+  const m = document.getElementById('mf').value;
+  const s = document.getElementById('sf').value;
 
-// KPI from totalsData (real numbers)
-const tf=totalsData.totalsByFunnel;
-const total=totalsData.totalRecords;
-const newLeads=tf.new||0;
-const processed=total-newLeads;
-const contact=tf.contact||0;
-const nocontact=tf.nocontact||0;
-const agreed=tf.agreed||0;
-const refused=tf.refused||0;
-const bfl=tf.bfl||0;
-const contract=tf.contract||0;
+  const tf = totalsData.totalsByFunnel || {};
+  // KPI always from real totals (filters on manager/source apply only to drill-down tables)
+  const total = totalsData.totalRecords || 0;
+  const newLeads = tf.new || 0;
+  const processed = total - newLeads;
+  const contact = tf.contact || 0;
+  const nocontact = tf.nocontact || 0;
+  const agreed = tf.agreed || 0;
+  const refused = tf.refused || 0;
+  const bfl = tf.bfl || 0;
+  const contract = tf.contract || 0;
 
-document.getElementById('kpi1').innerHTML=`
-<div class="card" onclick="sm('all')"><div class="card-title">1. Всего клиентов</div><div class="num">${total}</div><div class="card-sub">Кликните для списка</div></div>
-<div class="card" onclick="sm('new')"><div class="card-title">Новые (не обработаны)</div><div class="num">${newLeads}</div><div class="card-sub">${p(newLeads,total)}%</div></div>
-<div class="card" onclick="sm('processed')"><div class="card-title">Отработанные</div><div class="num">${processed}</div><div class="card-sub">${p(processed,total)}%</div></div>`;
+  // Detail subset for tables/modals
+  const d = D.filter(x => {
+    if (m && x.mid !== m) return false;
+    if (s && x.source !== s) return false;
+    return true;
+  });
+  window._d = d;
 
-document.getElementById('funnel').innerHTML=`
-<div class="st">Воронка клиентов</div>
-<table>
-<tr><th>Этап</th><th>Кол-во</th><th>Доля</th><th></th></tr>
-<tr onclick="sm('all')" style="cursor:pointer"><td><strong>1. Всего</strong></td><td><strong>${total}</strong></td><td>100%</td><td></td></tr>
-<tr onclick="sm('processed')" style="cursor:pointer"><td>2. Отработанные</td><td>${processed}</td><td>${p(processed,total)}%</td><td><div class="bar-h"><div class="bar-fill blue" style="width:${p(processed,total)}%"></div></div></td></tr>
-<tr onclick="sm('contact')" style="cursor:pointer"><td>&nbsp;&nbsp;2.1 Контактные</td><td>${contact}</td><td>${p(contact,processed)}%</td><td><div class="bar-h"><div class="bar-fill green" style="width:${p(contact,processed)}%"></div></div></td></tr>
-<tr onclick="sm('nocontact')" style="cursor:pointer"><td>&nbsp;&nbsp;2.2 Неконтактные</td><td>${nocontact}</td><td>${p(nocontact,processed)}%</td><td><div class="bar-h"><div class="bar-fill amber" style="width:${p(nocontact,processed)}%"></div></div></td></tr>
-<tr onclick="sm('agreed')" style="cursor:pointer"><td>3.1 Согласившиеся</td><td>${agreed}</td><td>${p(agreed,contact)}%</td><td><div class="bar-h"><div class="bar-fill green" style="width:${p(agreed,contact)}%"></div></div></td></tr>
-<tr onclick="sm('refused')" style="cursor:pointer"><td>3.2 Отказ</td><td>${refused}</td><td>${p(refused,contact)}%</td><td><div class="bar-h"><div class="bar-fill red" style="width:${p(refused,contact)}%"></div></div></td></tr>
-<tr onclick="sm('bfl')" style="cursor:pointer"><td>3.3 БФЛ</td><td>${bfl}</td><td>${p(bfl,contact)}%</td><td></td></tr>
-<tr onclick="sm('contract')" style="cursor:pointer"><td>4. Договоры</td><td>${contract}</td><td>${p(contract,agreed)}%</td><td><div class="bar-h"><div class="bar-fill green" style="width:${p(contract,agreed)}%"></div></div></td></tr>
-</table>`;
+  document.getElementById('kpi1').innerHTML =
+    card('all','1. Всего клиентов', total, 'Клик — список') +
+    card('new','Новые (не обработаны)', newLeads, p(newLeads,total) + '%') +
+    card('processed','Отработанные', processed, p(processed,total) + '%');
 
-document.getElementById('kpi2').innerHTML=`
-<div class="card" onclick="sm('contact')"><div class="card-title">2.1 Контактные</div><div class="num" style="color:#22c55e">${contact}</div><div class="card-sub">${p(contact,processed)}% от отраб.</div></div>
-<div class="card" onclick="sm('nocontact')"><div class="card-title">2.2 Неконтактные</div><div class="num" style="color:#f59e0b">${nocontact}</div><div class="card-sub">${p(nocontact,processed)}% от отраб.</div></div>
-<div class="card" onclick="sm('agreed')"><div class="card-title">3.1 Согласившиеся</div><div class="num" style="color:#22c55e">${agreed}</div><div class="card-sub">${p(agreed,contact)}% от контактных</div></div>
-<div class="card" onclick="sm('refused')"><div class="card-title">3.2 Отказ</div><div class="num" style="color:#ef4444">${refused}</div><div class="card-sub">${p(refused,contact)}% от контактных</div></div>
-<div class="card" onclick="sm('contract')"><div class="card-title">4. Договоры</div><div class="num" style="color:#22c55e">${contract}</div><div class="card-sub">${p(contract,agreed)}% от соглас.</div></div>`;
+  document.getElementById('funnel').innerHTML =
+    '<div class="st">Воронка клиентов</div><table>' +
+    '<tr><th>Этап</th><th>Кол-во</th><th>Доля</th><th></th></tr>' +
+    row('all','1. Всего', total, '100%', 100, 'blue') +
+    row('processed','2. Отработанные', processed, p(processed,total)+'%', p(processed,total), 'blue') +
+    row('contact','&nbsp;&nbsp;2.1 Контактные', contact, p(contact,processed)+'%', p(contact,processed), 'green') +
+    row('nocontact','&nbsp;&nbsp;2.2 Неконтактные', nocontact, p(nocontact,processed)+'%', p(nocontact,processed), 'amber') +
+    row('agreed','3.1 Согласившиеся', agreed, p(agreed,contact)+'%', p(agreed,contact), 'green') +
+    row('refused','3.2 Отказ', refused, p(refused,contact)+'%', p(refused,contact), 'red') +
+    row('bfl','3.3 БФЛ', bfl, p(bfl,contact)+'%', p(bfl,contact), 'amber') +
+    row('contract','4. Договоры', contract, p(contract,agreed)+'%', p(contract,agreed), 'green') +
+    '</table>';
 
-// Sources from detail data
-const sg={};D.filter(x=>{if(m&&x.mid!==m)return false;if(s&&x.source!==s)return false;return true}).forEach(x=>{const k=srcMap[x.source]||'Не указан';sg[k]=(sg[k]||0)+1});
-let sr='';Object.entries(sg).sort((a,b)=>b[1]-a[1]).forEach(([n,c])=>{sr+=`<tr><td>${n}</td><td>${c}</td><td>${p(c,total)}%</td></tr>`});
-document.getElementById('src').innerHTML=`<div class="st">По источникам</div><table><thead><tr><th>Источник</th><th>Кол-во</th><th>Доля</th></tr></thead><tbody>${sr}</tbody></table>`;
+  document.getElementById('kpi2').innerHTML =
+    card('contact','2.1 Контактные', contact, p(contact,processed)+'% от отраб.', '#22c55e') +
+    card('nocontact','2.2 Неконтактные', nocontact, p(nocontact,processed)+'% от отраб.', '#f59e0b') +
+    card('agreed','3.1 Согласившиеся', agreed, p(agreed,contact)+'% от контактных', '#22c55e') +
+    card('refused','3.2 Отказ', refused, p(refused,contact)+'% от контактных', '#ef4444') +
+    card('contract','4. Договоры', contract, p(contract,agreed)+'% от соглас.', '#22c55e');
 
-const mg={};D.filter(x=>{if(m&&x.mid!==m)return false;if(s&&x.source!==s)return false;return true}).forEach(x=>{const k=x.manager||'—';mg[k]=(mg[k]||0)+1});
-let mr='';Object.entries(mg).sort((a,b)=>b[1]-a[1]).forEach(([n,c])=>{mr+=`<tr><td>${n}</td><td>${c}</td><td>${p(c,total)}%</td></tr>`});
-document.getElementById('mgr').innerHTML=`<div class="st">По менеджерам</div><table><thead><tr><th>Менеджер</th><th>Кол-во</th><th>Доля</th></tr></thead><tbody>${mr}</tbody></table>`;
+  // Sources / managers from filtered detail sample
+  const sg = {}, mg = {};
+  d.forEach(x => {
+    const sn = srcMap[x.source] || 'Не указан';
+    sg[sn] = (sg[sn] || 0) + 1;
+    const mn = x.manager || '—';
+    mg[mn] = (mg[mn] || 0) + 1;
+  });
+  document.getElementById('src').innerHTML = simpleTable('По источникам (из drill-down выборки)', sg, d.length);
+  document.getElementById('mgr').innerHTML = simpleTable('По менеджерам (из drill-down выборки)', mg, d.length);
+}
 
-window._d=D;
+function card(key, title, num, sub, color){
+  return '<div class="card" onclick="sm(\''+key+'\')"><div class="card-title">'+title+'</div>' +
+    '<div class="num"'+(color?' style="color:'+color+'"':'')+'>'+num+'</div>' +
+    '<div class="card-sub">'+sub+'</div></div>';
+}
+function row(key, title, num, share, width, color){
+  return '<tr onclick="sm(\''+key+'\')" style="cursor:pointer"><td>'+title+'</td><td>'+num+'</td><td>'+share+'</td>' +
+    '<td><div class="bar-h"><div class="bar-fill '+color+'" style="width:'+Math.min(100,width||0)+'%"></div></div></td></tr>';
+}
+function simpleTable(title, obj, base){
+  let rows = '';
+  Object.entries(obj).sort((a,b)=>b[1]-a[1]).forEach(([n,c]) => {
+    rows += '<tr><td>'+n+'</td><td>'+c+'</td><td>'+p(c,base)+'%</td></tr>';
+  });
+  return '<div class="st">'+title+'</div><table><thead><tr><th>Название</th><th>Кол-во</th><th>Доля</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
 function sm(t){
-const o=document.getElementById('mO');
-const d=window._d||D;
-let data,title;
-if(t==='all'){data=d;title='Все клиенты';}
-else if(t==='new'){data=d.filter(x=>x.funnel==='new');title='Новые';}
-else if(t==='processed'){data=d.filter(x=>x.funnel!=='new');title='Отработанные';}
-else if(t==='contact'){data=d.filter(x=>x.funnel==='contact');title='Контактные';}
-else if(t==='nocontact'){data=d.filter(x=>x.funnel==='nocontact');title='Неконтактные';}
-else if(t==='agreed'){data=d.filter(x=>x.funnel==='agreed');title='Согласившиеся';}
-else if(t==='refused'){data=d.filter(x=>x.funnel==='refused');title='Отказ';}
-else if(t==='bfl'){data=d.filter(x=>x.funnel==='bfl');title='БФЛ';}
-else if(t==='contract'){data=d.filter(x=>x.funnel==='contract');title='Договоры';}
-else{data=d;title=t;}
+  const d = window._d || D;
+  let data = d, title = t;
+  if (t==='all') { data=d; title='Все клиенты'; }
+  else if (t==='new') { data=d.filter(x=>x.funnel==='new'); title='Новые'; }
+  else if (t==='processed') { data=d.filter(x=>x.funnel!=='new'); title='Отработанные'; }
+  else if (t==='contact') { data=d.filter(x=>x.funnel==='contact'); title='Контактные'; }
+  else if (t==='nocontact') { data=d.filter(x=>x.funnel==='nocontact'); title='Неконтактные'; }
+  else if (t==='agreed') { data=d.filter(x=>x.funnel==='agreed'); title='Согласившиеся'; }
+  else if (t==='refused') { data=d.filter(x=>x.funnel==='refused'); title='Отказ'; }
+  else if (t==='bfl') { data=d.filter(x=>x.funnel==='bfl'); title='БФЛ'; }
+  else if (t==='contract') { data=d.filter(x=>x.funnel==='contract'); title='Договоры'; }
 
-document.getElementById('mT').textContent=title;
-document.getElementById('mC').textContent=data.length+' записей (последние 200)';
+  document.getElementById('mT').textContent = title;
+  document.getElementById('mC').textContent = data.length + ' записей в drill-down (до ' + MAX_DETAIL + ')';
 
-const portal=(BX24.getAuth&&BX24.getAuth().domain)||'lbk.bitrix24.ru';
-let h='<table class="mt"><thead><tr><th>ID</th><th>Название</th><th>Стадия</th><th>Этап</th><th>Источник</th><th>Менеджер</th><th>Дата</th></tr></thead><tbody>';
-data.forEach(x=>{
-const fc=x.funnel==='contact'?'b-contact':x.funnel==='nocontact'?'b-nocontact':x.funnel==='agreed'?'b-agreed':x.funnel==='refused'?'b-refused':x.funnel==='bfl'?'b-bfl':x.funnel==='contract'?'b-contract':x.funnel==='postponed'?'b-postponed':'b-new';
-h+=`<tr><td><a href="https://${portal}/crm/deal/details/${x.id}/" class="dl" target="_blank">${x.id}</a></td><td>${x.title}</td><td>${x.stage}</td><td><span class="badge ${fc}">${funnelNames[x.funnel]||x.funnel}</span></td><td>${srcMap[x.source]||'—'}</td><td>${x.manager}</td><td>${x.date}</td></tr>`});
-h+='</tbody></table>';
-document.getElementById('mB').innerHTML=h;o.classList.add('a');
+  let h = '<table class="mt"><thead><tr><th>ID</th><th>Название</th><th>Стадия</th><th>Этап</th><th>Источник</th><th>Менеджер</th><th>Дата</th></tr></thead><tbody>';
+  data.forEach(x => {
+    const fc = x.funnel==='contact'?'b-contact':x.funnel==='nocontact'?'b-nocontact':x.funnel==='agreed'?'b-agreed':x.funnel==='refused'?'b-refused':x.funnel==='bfl'?'b-bfl':x.funnel==='contract'?'b-contract':x.funnel==='postponed'?'b-postponed':'b-new';
+    const link = 'https://' + portalDomain + '/crm/deal/details/' + x.id + '/';
+    h += '<tr><td><a class="dl" href="'+link+'" target="_blank">'+x.id+'</a></td><td>'+esc(x.title)+'</td><td>'+esc(x.stage_name||x.stage)+'</td><td><span class="badge '+fc+'">'+(funnelNames[x.funnel]||x.funnel)+'</span></td><td>'+(srcMap[x.source]||'—')+'</td><td>'+esc(x.manager)+'</td><td>'+x.date+'</td></tr>';
+  });
+  h += '</tbody></table>';
+  document.getElementById('mB').innerHTML = h;
+  document.getElementById('mO').classList.add('a');
 }
-function cm(e){if(!e||e.target===document.getElementById('mO'))document.getElementById('mO').classList.remove('a')}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')cm()});
+
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function cm(e){
+  if (!e || e.target === document.getElementById('mO')) document.getElementById('mO').classList.remove('a');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cm(); });
+
+// Init BX24 only inside Bitrix24 frame
+if (typeof BX24 !== 'undefined') {
+  BX24.init(function(){
+    bxReady = true;
+    try {
+      const auth = BX24.getAuth && BX24.getAuth();
+      if (auth && auth.domain) portalDomain = auth.domain;
+    } catch(e) {}
+    setStatus('Готово к загрузке');
+  });
+} else {
+  setErr('Откройте отчёт как приложение внутри Битрикс24 (JS SDK недоступен).');
+}
 </script>
-</body></html>
+</body>
+</html>
